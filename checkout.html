@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Checkout - MP Frames</title>
+
+<link rel="stylesheet" href="style.css">
+
+<style>
+
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#f5f5f5;
+}
+
+header{
+    background:#111;
+    color:#fff;
+    padding:15px;
+    text-align:center;
+}
+
+.checkout{
+    max-width:600px;
+    margin:40px auto;
+    background:#fff;
+    padding:25px;
+    border-radius:10px;
+    box-shadow:0 5px 15px rgba(0,0,0,.2);
+}
+
+.checkout h2{
+    text-align:center;
+    margin-bottom:20px;
+}
+
+.checkout input,
+.checkout textarea{
+
+    width:100%;
+    padding:12px;
+    margin:10px 0;
+    border:1px solid #ccc;
+    border-radius:6px;
+    font-size:16px;
+    box-sizing:border-box;
+
+}
+
+.checkout textarea{
+
+    height:120px;
+    resize:none;
+
+}
+
+.checkout button{
+
+    width:100%;
+    padding:15px;
+    background:#25D366;
+    color:#fff;
+    border:none;
+    border-radius:6px;
+    font-size:18px;
+    cursor:pointer;
+
+}
+
+.checkout button:hover{
+
+    background:#1ebc57;
+
+}
+
+.order-summary{
+
+    margin-top:25px;
+    padding:15px;
+    background:#f8f8f8;
+    border-radius:8px;
+
+}
+
+.order-summary h3{
+
+    margin-top:0;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<h1>MP Frames Checkout</h1>
+
+</header>
+
+<div class="checkout">
+
+<h2>Customer Details</h2>
+
+<input
+type="text"
+id="name"
+placeholder="Full Name">
+
+<input
+type="tel"
+id="phone"
+placeholder="Phone Number">
+
+<textarea
+id="address"
+placeholder="Delivery Address"></textarea>
+
+<div class="order-summary">
+
+<h3>Order Summary</h3>
+
+<p>Total Amount :
+<b>₹<span id="total">0</span></b></p>
+
+</div>
+
+<button onclick="placeOrder()">
+
+Place Order on WhatsApp
+
+</button>
+
+</div>
+
+<script>
+
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+let total = 0;
+
+cart.forEach(item=>{
+
+    total += item.price * (item.quantity || 1);
+
+});
+
+document.getElementById("total").innerText = total;
+
+function placeOrder(){
+
+    let name =
+    document.getElementById("name").value.trim();
+
+    let phone =
+    document.getElementById("phone").value.trim();
+
+    let address =
+    document.getElementById("address").value.trim();
+
+    if(name=="" || phone=="" || address==""){
+
+        alert("Please fill all details");
+
+        return;
+
+    }
+
+    if(phone.length!=10 || isNaN(phone)){
+
+        alert("Enter a valid 10-digit phone number");
+
+        return;
+
+    }
+
+    if(cart.length==0){
+
+        alert("Your cart is empty");
+
+        return;
+
+    }
+
+    let message = `🛒 New Order - MP Frames
+
+Customer Details
+
+Name : ${name}
+Phone : ${phone}
+Address : ${address}
+
+Products
+`;
+
+    let grandTotal = 0;
+
+    cart.forEach(item=>{
+
+        let qty = item.quantity || 1;
+
+        let subtotal = item.price * qty;
+
+        grandTotal += subtotal;
+
+        message += `
+${item.name}
+Category : ${item.category || "Not Available"}
+Qty : ${qty}
+Price : ₹${item.price}
+Subtotal : ₹${subtotal}
+
+`;
+
+    });
+
+    message += `
+Total Amount : ₹${grandTotal}
+`;
+
+    window.open(
+
+        "https://wa.me/6382667556?text="+
+        encodeURIComponent(message),
+
+        "_blank"
+
+    );
+
+    localStorage.removeItem("cart");
+
+    alert("Order Sent Successfully!");
+
+    window.location.href="index.html";
+
+}
+
+</script>
+
+</body>
+</html>

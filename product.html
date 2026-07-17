@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product Details - MP Frames</title>
+
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style>
+
+body{
+    font-family:Arial,sans-serif;
+    margin:0;
+    background:#f5f5f5;
+}
+
+header{
+    background:#111;
+    color:#fff;
+    padding:15px 30px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+header h1{
+    margin:0;
+}
+
+header a{
+    color:#fff;
+    text-decoration:none;
+    font-size:20px;
+}
+
+.container{
+    max-width:1100px;
+    margin:40px auto;
+    display:flex;
+    flex-wrap:wrap;
+    gap:40px;
+    background:#fff;
+    padding:30px;
+    border-radius:10px;
+    box-shadow:0 0 10px rgba(0,0,0,.15);
+}
+
+.left{
+    flex:1;
+}
+
+.left img{
+    width:100%;
+    border-radius:10px;
+}
+
+.right{
+    flex:1;
+}
+
+.right h1{
+    font-size:32px;
+}
+
+.category{
+    color:#666;
+    margin:15px 0;
+}
+
+.price{
+    color:#e91e63;
+    font-size:32px;
+    font-weight:bold;
+}
+
+.description{
+    margin-top:20px;
+    line-height:1.8;
+}
+
+button{
+    margin-top:20px;
+    padding:15px 30px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:18px;
+}
+
+.cart{
+    background:#111;
+    color:#fff;
+}
+
+.cart:hover{
+    background:gold;
+    color:#000;
+}
+
+.buy{
+    background:#25D366;
+    color:#fff;
+    margin-left:10px;
+}
+
+.buy:hover{
+    background:#1ebc57;
+}
+
+.back{
+    display:inline-block;
+    margin:20px;
+    text-decoration:none;
+    color:#111;
+    font-weight:bold;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<h1>MP Frames</h1>
+
+<a href="cart.html">
+    <i class="fa-solid fa-cart-shopping"></i>
+    <span id="cart-count">0</span>
+</a>
+
+</header>
+
+<a href="products.html" class="back">
+← Back to Products
+</a>
+
+<div class="container">
+
+<div class="left">
+
+<img id="productImage" alt="Product Image">
+
+</div>
+
+<div class="right">
+
+<h1 id="productName"></h1>
+
+<p class="category" id="productCategory"></p>
+
+<h2 class="price" id="productPrice"></h2>
+
+<p class="description">
+
+Premium Quality Photo Frame.<br><br>
+
+✔ High Quality Finish<br>
+✔ Long Lasting Material<br>
+✔ Perfect for Home Decoration<br>
+✔ Best Gift Choice
+
+</p>
+
+<button class="cart" onclick="addToCart()">
+🛒 Add To Cart
+</button>
+
+<button class="buy" onclick="buyNow()">
+Buy Now
+</button>
+
+</div>
+
+</div>
+
+<script>
+
+const product = JSON.parse(localStorage.getItem("selectedProduct"));
+
+if(!product){
+
+    alert("No Product Selected");
+
+    window.location.href="products.html";
+
+}
+
+document.getElementById("productImage").src=product.image;
+document.getElementById("productName").innerText=product.name;
+document.getElementById("productCategory").innerText="Category : "+(product.category || "Not Available");
+document.getElementById("productPrice").innerText="₹"+product.price;
+
+function updateCartCount(){
+
+    const count=document.getElementById("cart-count");
+
+    if(count){
+
+        const cart=JSON.parse(localStorage.getItem("cart")) || [];
+
+        count.innerText=cart.length;
+
+    }
+
+}
+
+updateCartCount();
+
+function addToCart(){
+
+    let cart=JSON.parse(localStorage.getItem("cart")) || [];
+
+    const existing=cart.find(item=>item.id===product.id);
+
+    if(existing){
+
+        existing.quantity++;
+
+    }else{
+
+        cart.push({
+
+            ...product,
+
+            quantity:1
+
+        });
+
+    }
+
+    localStorage.setItem("cart",JSON.stringify(cart));
+
+    updateCartCount();
+
+    alert("Product Added To Cart");
+
+}
+
+function buyNow(){
+
+    addToCart();
+
+    window.location.href="checkout.html";
+
+}
+
+</script>
+
+</body>
+</html>
