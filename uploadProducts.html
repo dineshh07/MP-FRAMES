@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload Products</title>
+</head>
+<body>
+
+<h2>Upload Products</h2>
+
+<button onclick="uploadProducts()">
+Upload All Products
+</button>
+
+<script type="module">
+
+import { db } from "./firebase.js";
+
+import {
+collection,
+addDoc
+}
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+async function uploadProducts(){
+
+const products=[
+
+{
+name:"6 x 4 Photo Frame",
+price:700,
+category:"Photo",
+image:"YOUR_IMAGE_URL_1"
+},
+
+{
+name:"6 x 8 Photo Frame",
+price:1000,
+category:"Photo",
+image:"YOUR_IMAGE_URL_2"
+},
+
+{
+name:"10 x 12 Photo Frame",
+price:450,
+category:"Photo",
+image:"YOUR_IMAGE_URL_3"
+},
+
+{
+name:"10 x 15 Photo Frame",
+price:550,
+category:"Photo",
+image:"YOUR_IMAGE_URL_4"
+},
+
+{
+name:"12 x 8 Photo Frame",
+price:400,
+category:"Photo",
+image:"YOUR_IMAGE_URL_5"
+},
+
+{
+name:"12 x 18 Photo Frame",
+price:700,
+category:"Photo",
+image:"YOUR_IMAGE_URL_6"
+},
+
+{
+name:"12 x 24 Photo Frame",
+price:1000,
+category:"Photo",
+image:"YOUR_IMAGE_URL_7"
+},
+
+{
+name:"12 x 30 Photo Frame",
+price:1200,
+category:"Photo",
+image:"YOUR_IMAGE_URL_8"
+},
+
+{
+name:"16 x 20 Photo Frame",
+price:1500,
+category:"Photo",
+image:"YOUR_IMAGE_URL_9"
+},
+
+{
+name:"18 x 24 Photo Frame",
+price:1800,
+category:"Photo",
+image:"YOUR_IMAGE_URL_10"
+},
+
+{
+name:"20 x 24 Photo Frame",
+price:2000,
+category:"Photo",
+image:"YOUR_IMAGE_URL_11"
+},
+
+{
+name:"20 x 30 Photo Frame",
+price:2700,
+category:"Photo",
+image:"YOUR_IMAGE_URL_12"
+},
+
+{
+name:"24 x 24 Photo Frame",
+price:2200,
+category:"Photo",
+image:"YOUR_IMAGE_URL_13"
+},
+
+{
+name:"24 x 36 Photo Frame",
+price:3300,
+category:"Photo",
+image:"YOUR_IMAGE_URL_14"
+}
+
+];
+
+for(const product of products){
+
+await addDoc(collection(db,"products"),product);
+
+}
+
+alert("All Products Uploaded Successfully");
+
+}
+
+window.uploadProducts=uploadProducts;
+
+</script>
+
+</body>
+</html>
