@@ -107,35 +107,24 @@ header{
 
 <h2>Customer Details</h2>
 
-<input
-type="text"
-id="name"
-placeholder="Full Name">
+<input type="text" id="name" placeholder="Full Name">
 
-<input
-type="tel"
-id="phone"
-placeholder="Phone Number">
+<input type="tel" id="phone" placeholder="Phone Number">
 
-<textarea
-id="address"
-placeholder="Delivery Address"></textarea>
+<textarea id="address" placeholder="Address"></textarea>
 
-<div class="order-summary">
+<label>Custom Message</label>
+<textarea id="message"
+placeholder="Example: Happy Birthday Dinesh"></textarea>
 
-<h3>Order Summary</h3>
-
-<p>Total Amount :
-<b>₹<span id="total">0</span></b></p>
-
-</div>
+<label>Upload Your Photo</label>
+<input type="file"
+id="customerImage"
+accept="image/*">
 
 <button onclick="placeOrder()">
-
 Place Order on WhatsApp
-
 </button>
-
 </div>
 
 <script>
