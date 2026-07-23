@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://dineshh07.github.io/MP-FRAMES/sitemap.xml
