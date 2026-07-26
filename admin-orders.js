@@ -9,40 +9,32 @@ const table = document.getElementById("ordersTable");
 
 async function loadOrders() {
 
-    table.innerHTML = "";
+    console.log("Loading orders...");
 
     const snapshot = await getDocs(collection(db, "orders"));
 
+    console.log("Documents:", snapshot.size);
+
+    table.innerHTML = "";
+
     snapshot.forEach((doc) => {
+
+        console.log(doc.data());
 
         const order = doc.data();
 
         table.innerHTML += `
-
         <tr>
-
             <td>${order.customerName}</td>
-
             <td>${order.phone}</td>
-
             <td>${order.address}</td>
-
             <td>${order.frameName}</td>
-
             <td>${order.message}</td>
-
             <td>${order.quantity}</td>
-
             <td>₹${order.price}</td>
-
             <td>${order.status}</td>
-
-        </tr>
-
-        `;
-
+        </tr>`;
     });
-
 }
 
 loadOrders();
