@@ -50,12 +50,11 @@ order.photo
 </button>
 </a>
 
-<a href="${order.photo}" download>
-<button class="photo-btn">
-⬇ Download
-</button>
+<a href="${order.photo.replace("/upload/", "/upload/fl_attachment/")}" target="_blank">
+    <button class="photo-btn">
+        ⬇ Download
+    </button>
 </a>
-`
 :
 "No Photo"
 }
