@@ -111,5 +111,14 @@ window.updateStatus = async function(id) {
   alert("Status Updated");
 
 };
+document.getElementById("logoutBtn").addEventListener("click", async () => {
+
+    await signOut(auth);
+
+    alert("Logged Out Successfully");
+
+    window.location.href = "login.html";
+
+});
 
 loadOrders();
