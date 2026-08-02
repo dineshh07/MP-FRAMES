@@ -34,10 +34,16 @@ async function loadOrders() {
 
         <td>
           ${
-            order.photo
-              ? `<img src="${order.photo}" width="80" height="80">`
-              : "No Photo"
-          }
+  order.photo
+    ? `
+      <img src="${order.photo}" width="80" height="80"><br><br>
+
+      <a href="${order.photo}" download target="_blank">
+        <button>Download</button>
+      </a>
+    `
+    : "No Photo"
+}
         </td>
 
         <td>
