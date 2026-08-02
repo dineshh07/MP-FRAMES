@@ -280,3 +280,19 @@ nav{
 #logoutBtn:hover{
     background:#c62828;
 }
+.admin-link{
+    position: fixed;
+    bottom: 15px;
+    right: 15px;
+    font-size: 12px;
+    color: #999;
+    text-decoration: none;
+    opacity: 0.5;
+    transition: 0.3s;
+    z-index: 9999;
+}
+
+.admin-link:hover{
+    opacity: 1;
+    color: #000;
+}
