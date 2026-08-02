@@ -15,6 +15,7 @@ cart.forEach(item => {
 
 document.getElementById("total").innerText = total;
 
+// Upload Photo to Cloudinary
 async function uploadPhoto() {
 
     const file = document.getElementById("photo").files[0];
@@ -37,8 +38,29 @@ async function uploadPhoto() {
     const data = await response.json();
 
     return data.secure_url;
-
 }
+
+// Place Order
+window.placeOrder = async function () {
+
+    let name = document.getElementById("name").value.trim();
+    let phone = document.getElementById("phone").value.trim();
+    let address = document.getElementById("address").value.trim();
+
+    if (!name || !phone || !address) {
+        alert("Fill all details");
+        return;
+    }
+
+    if (cart.length === 0) {
+        alert("Cart is empty");
+        return;
+    }
+
+    // Upload customer photo
+    const photoUrl = await uploadPhoto();
+
+    for (const item of cart) {
 
         await addDoc(collection(db, "orders"), {
 
@@ -54,6 +76,8 @@ async function uploadPhoto() {
             price: item.price,
 
             message: "",
+
+            photo: photoUrl,
 
             status: "Pending",
 
@@ -74,7 +98,7 @@ Address : ${address}
 Total : ₹${total}`;
 
     window.open(
-        "https://wa.me/6382667556?text=" +
+        "https://wa.me/8220798492?text=" +
         encodeURIComponent(whatsapp),
         "_blank"
     );
@@ -84,4 +108,4 @@ Total : ₹${total}`;
     alert("Order Placed Successfully");
 
     location.href = "index.html";
-}
+};
