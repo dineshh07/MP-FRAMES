@@ -20,7 +20,20 @@ async function uploadPhoto() {
 
     const file = document.getElementById("photo").files[0];
 
-    if (!file) return "";
+if (!file) {
+    alert("Please upload a photo.");
+    return "";
+}
+
+if (!["image/jpeg", "image/png"].includes(file.type)) {
+    alert("Only JPG and PNG images are allowed.");
+    return "";
+}
+
+if (file.size > 10 * 1024 * 1024) {
+    alert("Maximum file size is 10MB.");
+    return "";
+}
 
     const formData = new FormData();
 
