@@ -246,3 +246,24 @@ nav{
     border-color:#ff9800;
 
 }
+.photo-box{
+    text-align:center;
+}
+
+.photo-box img{
+    width:80px;
+    height:80px;
+    object-fit:cover;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.photo-btn{
+    margin-top:8px;
+    padding:6px 10px;
+    border:none;
+    border-radius:5px;
+    background:#007BFF;
+    color:white;
+    cursor:pointer;
+}
