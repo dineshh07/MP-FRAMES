@@ -12,17 +12,21 @@ import {
   signOut
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
+const table = document.getElementById("ordersTable");
+
 onAuthStateChanged(auth, (user) => {
 
     if (!user) {
+
         window.location.href = "login.html";
+
     } else {
+
         loadOrders();
+
     }
 
 });
-
-const table = document.getElementById("ordersTable");
 
 async function loadOrders() {
 
