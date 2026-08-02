@@ -51,7 +51,6 @@ async function loadOrders() {
 
         <td>${order.message || ""}</td>
 
-        <td>
          <td class="photo-box">
 ${
 order.photo
@@ -120,5 +119,12 @@ document.getElementById("logoutBtn").addEventListener("click", async () => {
     window.location.href = "login.html";
 
 });
+onAuthStateChanged(auth, (user) => {
 
-loadOrders();
+    if (!user) {
+        window.location.href = "login.html";
+    } else {
+        loadOrders();
+    }
+
+});
