@@ -33,18 +33,33 @@ async function loadOrders() {
         <td>${order.message || ""}</td>
 
         <td>
-          ${
-  order.photo
-    ? `
-      <img src="${order.photo}" width="80" height="80"><br><br>
+         <td class="photo-box">
+${
+order.photo
+?
+`
+<a href="${order.photo}" target="_blank">
+<img src="${order.photo}">
+</a>
 
-      <a href="${order.photo}" download target="_blank">
-        <button>Download</button>
-      </a>
-    `
-    : "No Photo"
+<br>
+
+<a href="${order.photo}" target="_blank">
+<button class="photo-btn">
+🔍 View
+</button>
+</a>
+
+<a href="${order.photo}" download>
+<button class="photo-btn">
+⬇ Download
+</button>
+</a>
+`
+:
+"No Photo"
 }
-        </td>
+</td>
 
         <td>
           <select id="status-${document.id}">
