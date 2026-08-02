@@ -282,17 +282,17 @@ nav{
 }
 .admin-link{
     position: fixed;
-    bottom: 15px;
-    right: 15px;
-    font-size: 12px;
-    color: #999;
+    bottom: 20px;
+    right: 20px;
+    background: #111;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 8px;
     text-decoration: none;
-    opacity: 0.5;
-    transition: 0.3s;
-    z-index: 9999;
+    font-size: 14px;
+    z-index: 99999;
 }
 
 .admin-link:hover{
-    opacity: 1;
-    color: #000;
+    background: #333;
 }
