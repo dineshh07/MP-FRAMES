@@ -280,12 +280,16 @@ nav{
     background:#c62828;
 }
 .admin-link{
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
     background: #111;
     color: white;
-    padding: 8px 15px;
+    padding: 10px 15px;
     border-radius: 8px;
     text-decoration: none;
-    font-size: 15px;
+    font-size: 14px;
+    z-index: 99999;
 }
 
 .admin-link:hover{
