@@ -15,23 +15,30 @@ cart.forEach(item => {
 
 document.getElementById("total").innerText = total;
 
-window.placeOrder = async function () {
+async function uploadPhoto() {
 
-    let name = document.getElementById("name").value.trim();
-    let phone = document.getElementById("phone").value.trim();
-    let address = document.getElementById("address").value.trim();
+    const file = document.getElementById("photo").files[0];
 
-    if (!name || !phone || !address) {
-        alert("Fill all details");
-        return;
-    }
+    if (!file) return "";
 
-    if (cart.length == 0) {
-        alert("Cart is empty");
-        return;
-    }
+    const formData = new FormData();
 
-    for (const item of cart) {
+    formData.append("file", file);
+    formData.append("upload_preset", "mpframes");
+
+    const response = await fetch(
+        "https://api.cloudinary.com/v1_1/dqavm3wk/image/upload",
+        {
+            method: "POST",
+            body: formData
+        }
+    );
+
+    const data = await response.json();
+
+    return data.secure_url;
+
+}
 
         await addDoc(collection(db, "orders"), {
 
