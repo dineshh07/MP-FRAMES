@@ -1,4 +1,4 @@
-import { db } from "./firebase.js";
+import { db, auth } from "./firebase.js";
 
 import {
   collection,
@@ -6,6 +6,21 @@ import {
   doc,
   updateDoc
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+import {
+  onAuthStateChanged,
+  signOut
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+onAuthStateChanged(auth, (user) => {
+
+    if (!user) {
+        window.location.href = "login.html";
+    } else {
+        loadOrders();
+    }
+
+});
 
 const table = document.getElementById("ordersTable");
 
