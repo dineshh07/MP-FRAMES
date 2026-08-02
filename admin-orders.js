@@ -120,12 +120,3 @@ document.getElementById("logoutBtn").addEventListener("click", async () => {
     window.location.href = "login.html";
 
 });
-onAuthStateChanged(auth, (user) => {
-
-    if (!user) {
-        window.location.href = "login.html";
-    } else {
-        loadOrders();
-    }
-
-});
