@@ -267,3 +267,16 @@ nav{
     color:white;
     cursor:pointer;
 }
+#logoutBtn{
+    background:#e53935;
+    color:white;
+    border:none;
+    padding:10px 18px;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:15px;
+}
+
+#logoutBtn:hover{
+    background:#c62828;
+}
