@@ -1,7 +1,4 @@
-import Razorpay from "razorpay";
-
 export default async function handler(req, res) {
-
     if (req.method !== "POST") {
         return res.status(405).json({
             error: "Method not allowed"
@@ -9,46 +6,66 @@ export default async function handler(req, res) {
     }
 
     try {
-
-        const razorpay = new Razorpay({
-            key_id: process.env.RAZORPAY_KEY_ID,
-            key_secret: process.env.RAZORPAY_KEY_SECRET
-        });
-
         const { amount } = req.body;
 
-        if (!amount || amount <= 0) {
+        if (!amount || Number(amount) <= 0) {
             return res.status(400).json({
                 error: "Invalid amount"
             });
         }
 
-        const order = await razorpay.orders.create({
+        const keyId = process.env.RAZORPAY_KEY_ID;
+        const keySecret = process.env.RAZORPAY_KEY_SECRET;
 
-            amount: Math.round(amount * 100),
+        if (!keyId || !keySecret) {
+            return res.status(500).json({
+                error: "Razorpay environment variables are missing"
+            });
+        }
 
-            currency: "INR",
+        const auth = Buffer
+            .from(`${keyId}:${keySecret}`)
+            .toString("base64");
 
-            receipt:
-                "mpframes_" +
-                Date.now(),
+        const response = await fetch(
+            "https://api.razorpay.com/v1/orders",
+            {
+                method: "POST",
 
-            notes: {
-                website: "MP Frames"
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Basic ${auth}`
+                },
+
+                body: JSON.stringify({
+                    amount: Math.round(Number(amount) * 100),
+                    currency: "INR",
+                    receipt: `mpframes_${Date.now()}`,
+                    payment_capture: 1
+                })
             }
+        );
 
+        const data = await response.json();
+
+        if (!response.ok) {
+            return res.status(response.status).json({
+                error: data.error?.description || "Razorpay order creation failed"
+            });
+        }
+
+        return res.status(200).json({
+            orderId: data.id,
+            amount: data.amount,
+            currency: data.currency,
+            keyId
         });
 
-        return res.status(200).json(order);
-
     } catch (error) {
-
         console.error(error);
 
         return res.status(500).json({
-            error: "Unable to create Razorpay order"
+            error: "Server error while creating Razorpay order"
         });
-
     }
-
 }
