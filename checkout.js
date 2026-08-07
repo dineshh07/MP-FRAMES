@@ -111,7 +111,7 @@ Address : ${address}
 Total : ₹${total}`;
 
     window.open(
-        "https://wa.me/8220798492?text=" +
+        "https://wa.me/+918220798492?text=" +
         encodeURIComponent(whatsapp),
         "_blank"
     );
