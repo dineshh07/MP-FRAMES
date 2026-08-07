@@ -8,9 +8,9 @@ export default async function handler(req, res) {
     try {
         const { amount } = req.body;
 
-        if (!amount || Number(amount) <= 0) {
+        if (!amount) {
             return res.status(400).json({
-                error: "Invalid amount"
+                error: "Amount is required"
             });
         }
 
@@ -31,17 +31,14 @@ export default async function handler(req, res) {
             "https://api.razorpay.com/v1/orders",
             {
                 method: "POST",
-
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Basic ${auth}`
                 },
-
                 body: JSON.stringify({
                     amount: Math.round(Number(amount) * 100),
                     currency: "INR",
-                    receipt: `mpframes_${Date.now()}`,
-                    payment_capture: 1
+                    receipt: `mpframes_${Date.now()}`
                 })
             }
         );
@@ -49,23 +46,16 @@ export default async function handler(req, res) {
         const data = await response.json();
 
         if (!response.ok) {
-            return res.status(response.status).json({
-                error: data.error?.description || "Razorpay order creation failed"
-            });
+            return res.status(response.status).json(data);
         }
 
-        return res.status(200).json({
-            orderId: data.id,
-            amount: data.amount,
-            currency: data.currency,
-            keyId
-        });
+        return res.status(200).json(data);
 
     } catch (error) {
         console.error(error);
 
         return res.status(500).json({
-            error: "Server error while creating Razorpay order"
+            error: "Failed to create Razorpay order"
         });
     }
 }
