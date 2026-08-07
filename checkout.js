@@ -100,8 +100,8 @@ window.placeOrder = async function () {
 
     }
 
-    let whatsapp = `🛒 New Order
-
+    const whatsapp = `🛒 New Order -MP FRAMES
+    
 Name : ${name}
 
 Phone : ${phone}
