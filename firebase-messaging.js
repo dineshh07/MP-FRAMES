@@ -11,7 +11,6 @@ const messaging = getMessaging(app);
 const VAPID_KEY =
 "BCfsMWuDmRYo0PK5dCB6gJPcSy-GWxn4iLR7IopNog94XqPHwMPU4GPQEEgst6tF2-WWhryhHrFQv-QAeTDj4Qw";
 
-
 export async function requestNotificationPermission() {
 
     try {
@@ -24,7 +23,6 @@ export async function requestNotificationPermission() {
             return null;
         }
 
-        // Register Firebase service worker
         const registration =
             await navigator.serviceWorker.register(
                 "/firebase-messaging-sw.js"
@@ -60,7 +58,6 @@ export async function requestNotificationPermission() {
         return null;
     }
 }
-
 
 onMessage(messaging, payload => {
 
