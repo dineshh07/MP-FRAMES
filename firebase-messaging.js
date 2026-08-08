@@ -20,42 +20,40 @@ export async function requestNotificationPermission() {
             await Notification.requestPermission();
 
         if (permission !== "granted") {
-
             console.log("Notification permission denied");
-
             return null;
         }
 
-
-        const token = await getToken(
-            messaging,
-            {
-                vapidKey: VAPID_KEY
-            }
-        );
-
-
-        if (!token) {
-
-            console.log("No FCM token available");
-
-            return null;
-        }
-
+        // Register Firebase service worker
+        const registration =
+            await navigator.serviceWorker.register(
+                "/firebase-messaging-sw.js"
+            );
 
         console.log(
-            "FCM TOKEN:",
-            token
+            "Firebase service worker registered:",
+            registration
         );
 
+        const token =
+            await getToken(messaging, {
+                vapidKey: VAPID_KEY,
+                serviceWorkerRegistration: registration
+            });
+
+        if (!token) {
+            console.log("FCM token not generated");
+            return null;
+        }
+
+        console.log("FCM TOKEN:", token);
 
         return token;
-
 
     } catch (error) {
 
         console.error(
-            "FCM Error:",
+            "FCM setup error:",
             error
         );
 
@@ -64,28 +62,22 @@ export async function requestNotificationPermission() {
 }
 
 
-onMessage(
-    messaging,
-    payload => {
+onMessage(messaging, payload => {
 
-        console.log(
-            "FCM Notification:",
-            payload
-        );
+    console.log(
+        "Notification received:",
+        payload
+    );
 
+    const title =
+        payload.notification?.title ||
+        "MP Frames";
 
-        const title =
-            payload.notification?.title ||
-            "MP Frames";
+    const body =
+        payload.notification?.body ||
+        "New Order";
 
-
-        const body =
-            payload.notification?.body ||
-            "New notification";
-
-
-        alert(
-            title + "\n\n" + body
-        );
-    }
-);
+    alert(
+        title + "\n\n" + body
+    );
+});
