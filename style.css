@@ -295,3 +295,34 @@ nav{
 .admin-link:hover{
     background: #333;
 }
+/* Mobile Navbar */
+@media (max-width: 600px) {
+
+    header {
+        flex-direction: column;
+        gap: 12px;
+        padding: 15px 10px;
+    }
+
+    header .logo h2 {
+        margin: 0;
+    }
+
+    nav {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        width: 100%;
+    }
+
+    nav a {
+        font-size: 14px;
+        white-space: nowrap;
+    }
+
+    nav a i {
+        margin-right: 3px;
+    }
+}
