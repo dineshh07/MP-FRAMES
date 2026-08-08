@@ -135,22 +135,34 @@ Add Product
 </div>
 
 <script type="module">
-    
-    import { requestNotificationPermission } 
-    from "./firebase-messaging.js";
+    console.log("FCM script starting...");
 
-    window.addEventListener("load", async () => {
+    import("./firebase-messaging.js")
+        .then(async (module) => {
 
-        const token = await requestNotificationPermission();
+            console.log("firebase-messaging.js loaded ✅");
 
-        if (token) {
-            console.log("Admin notification enabled ✅");
-        }
+            const token =
+                await module.requestNotificationPermission();
 
-    });
+            if (token) {
+                console.log("Admin notification enabled ✅");
+            } else {
+                console.log("FCM token not generated ❌");
+            }
+
+        })
+        .catch((error) => {
+
+            console.error(
+                "FCM loading error ❌",
+                error
+            );
+
+        });
 </script>
 
-<script type="module" src="admin.js"></script>
+<script type="module" src="./admin.js"></script>
 
 </body>
 </html>
