@@ -97,7 +97,33 @@
 </table>
 
 <script type="module" src="admin-orders.js"></script>
+<script type="module">
+    console.log("MP Frames notification system starting...");
 
+    import("./firebase-messaging.js")
+        .then(async (module) => {
+
+            console.log("Firebase messaging loaded ✅");
+
+            const token =
+                await module.requestNotificationPermission();
+
+            if (token) {
+                console.log("Admin notification enabled ✅");
+            } else {
+                console.log("Notification token not generated ❌");
+            }
+
+        })
+        .catch((error) => {
+
+            console.error(
+                "Firebase messaging loading error ❌",
+                error
+            );
+
+        });
+</script>
 </body>
 
 </html>
