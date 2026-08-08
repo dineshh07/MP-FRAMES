@@ -4,12 +4,21 @@ import {
     onMessage
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-messaging.js";
 
-import { app } from "./firebase.js";
+import {
+    app,
+    db
+} from "./firebase.js";
+
+import {
+    collection,
+    addDoc
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
 const messaging = getMessaging(app);
 
 const VAPID_KEY =
 "BCfsMWuDmRYo0PK5dCB6gJPcSy-GWxn4iLR7IopNog94XqPHwMPU4GPQEEgst6tF2-WWhryhHrFQv-QAeTDj4Qw";
+
 
 export async function requestNotificationPermission() {
 
@@ -19,7 +28,6 @@ export async function requestNotificationPermission() {
             await Notification.requestPermission();
 
         if (permission !== "granted") {
-            console.log("Notification permission denied");
             return null;
         }
 
@@ -27,11 +35,6 @@ export async function requestNotificationPermission() {
             await navigator.serviceWorker.register(
                 "/firebase-messaging-sw.js"
             );
-
-        console.log(
-            "Firebase service worker registered:",
-            registration
-        );
 
         const token =
             await getToken(messaging, {
@@ -44,7 +47,16 @@ export async function requestNotificationPermission() {
             return null;
         }
 
-        console.log("FCM TOKEN:", token);
+        // Save admin device token
+        await addDoc(
+            collection(db, "adminNotificationTokens"),
+            {
+                token: token,
+                createdAt: new Date()
+            }
+        );
+
+        console.log("Notification token saved ✅");
 
         return token;
 
@@ -59,6 +71,7 @@ export async function requestNotificationPermission() {
     }
 }
 
+
 onMessage(messaging, payload => {
 
     console.log(
@@ -66,15 +79,4 @@ onMessage(messaging, payload => {
         payload
     );
 
-    const title =
-        payload.notification?.title ||
-        "MP Frames";
-
-    const body =
-        payload.notification?.body ||
-        "New Order";
-
-    alert(
-        title + "\n\n" + body
-    );
 });
