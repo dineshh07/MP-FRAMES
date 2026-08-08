@@ -5,7 +5,6 @@ import {
     addDoc
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
-
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
 let total = 0;
@@ -18,7 +17,7 @@ document.getElementById("total").innerText = total;
 
 
 // ================================
-// LOAD RAZORPAY CHECKOUT
+// LOAD RAZORPAY
 // ================================
 
 function loadRazorpay() {
@@ -32,7 +31,8 @@ function loadRazorpay() {
 
         const script = document.createElement("script");
 
-        script.src = "https://checkout.razorpay.com/v1/checkout.js";
+        script.src =
+            "https://checkout.razorpay.com/v1/checkout.js";
 
         script.onload = () => resolve(true);
 
@@ -46,7 +46,7 @@ function loadRazorpay() {
 
 
 // ================================
-// UPLOAD PHOTO TO CLOUDINARY
+// UPLOAD PHOTO
 // ================================
 
 async function uploadPhoto() {
@@ -126,7 +126,7 @@ async function createRazorpayOrder() {
 
 
 // ================================
-// VERIFY RAZORPAY PAYMENT
+// VERIFY PAYMENT
 // ================================
 
 async function verifyPayment(paymentResponse) {
@@ -209,7 +209,7 @@ async function saveOrders(
 
 
 // ================================
-// WHATSAPP MESSAGE
+// WHATSAPP
 // ================================
 
 function sendWhatsApp(
@@ -219,28 +219,46 @@ function sendWhatsApp(
     paymentId
 ) {
 
-    const whatsapp = `🛒 NEW ORDER - MP FRAMES
+    let products = "";
 
-Name : ${name}
+    cart.forEach(item => {
 
-Phone : ${phone}
+        products +=
+            `• ${item.name} x ${item.quantity || 1} - ₹${Number(item.price) * (item.quantity || 1)}\n`;
 
-Address : ${address}
+    });
 
-Total : ₹${total}
+    const whatsapp = `🛒 *NEW ORDER - MP FRAMES*
 
-Payment : Paid ✅
+👤 Name : ${name}
 
-Payment ID : ${paymentId}`;
+📱 Phone : ${phone}
+
+📍 Address :
+${address}
+
+🖼️ Products :
+${products}
+
+💰 Total : ₹${total}
+
+💳 Payment : Paid ✅
+
+🧾 Payment ID : ${paymentId}`;
+
 
     const whatsappUrl =
         "https://wa.me/918220798492?text=" +
         encodeURIComponent(whatsapp);
 
-    window.open(
-        whatsappUrl,
-        "_blank"
-    );
+
+    /*
+       IMPORTANT:
+       Use location.href instead of window.open().
+       This avoids popup blocking after Razorpay payment.
+    */
+
+    window.location.href = whatsappUrl;
 }
 
 
@@ -284,12 +302,11 @@ window.placeOrder = async function () {
         }
 
 
-        // Disable button
-
         const button =
             document.querySelector(
                 ".checkout button"
             );
+
 
         if (button) {
 
@@ -317,7 +334,9 @@ window.placeOrder = async function () {
             await createRazorpayOrder();
 
 
-        // Razorpay options
+        // ================================
+        // RAZORPAY OPTIONS
+        // ================================
 
         const options = {
 
@@ -329,28 +348,22 @@ window.placeOrder = async function () {
 
             name: "MP Frames",
 
-            description:
-                "Photo Frame Order",
+            description: "Photo Frame Order",
 
-            order_id:
-                razorpayOrder.orderId,
+            order_id: razorpayOrder.orderId,
 
 
-            handler: async function (
-                response
-            ) {
+            handler: async function (response) {
 
                 try {
 
                     // Verify payment
 
                     const verification =
-                        await verifyPayment(
-                            response
-                        );
+                        await verifyPayment(response);
 
 
-                    // Save Firebase order
+                    // Save order to Firebase
 
                     await saveOrders(
                         name,
@@ -362,7 +375,9 @@ window.placeOrder = async function () {
                     );
 
 
-                    // WhatsApp
+                    // ================================
+                    // WHATSAPP
+                    // ================================
 
                     sendWhatsApp(
                         name,
@@ -372,33 +387,26 @@ window.placeOrder = async function () {
                     );
 
 
-                    // Clear cart
+                    // NOTE:
+                    // Do NOT clear cart before WhatsApp.
+                    // WhatsApp URL is opened first.
 
-                    localStorage.removeItem(
-                        "cart"
-                    );
-
-
-                    alert(
-                        "Payment Successful! 🎉\nOrder Placed Successfully!"
-                    );
-
-
-                    location.href =
-                        "index.html";
 
                 } catch (error) {
 
-                    console.error(error);
+                    console.error(
+                        "Order error:",
+                        error
+                    );
 
                     alert(
                         "Payment received, but order verification failed. Please contact MP Frames."
                     );
 
+
                     if (button) {
 
-                        button.disabled =
-                            false;
+                        button.disabled = false;
 
                         button.innerText =
                             "Place Order";
@@ -413,8 +421,7 @@ window.placeOrder = async function () {
 
                     if (button) {
 
-                        button.disabled =
-                            false;
+                        button.disabled = false;
 
                         button.innerText =
                             "Place Order";
@@ -460,14 +467,15 @@ window.placeOrder = async function () {
                     response.error
                 );
 
+
                 alert(
                     "Payment failed. Please try again."
                 );
 
+
                 if (button) {
 
-                    button.disabled =
-                        false;
+                    button.disabled = false;
 
                     button.innerText =
                         "Place Order";
@@ -478,9 +486,11 @@ window.placeOrder = async function () {
 
         razorpay.open();
 
+
     } catch (error) {
 
         console.error(error);
+
 
         alert(
             error.message ||
@@ -492,6 +502,7 @@ window.placeOrder = async function () {
             document.querySelector(
                 ".checkout button"
             );
+
 
         if (button) {
 
