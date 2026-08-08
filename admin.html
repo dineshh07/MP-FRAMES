@@ -134,6 +134,21 @@ Add Product
 
 </div>
 
+<script type="module">
+    import { requestNotificationPermission } 
+    from "./firebase-messaging.js";
+
+    window.addEventListener("load", async () => {
+
+        const token = await requestNotificationPermission();
+
+        if (token) {
+            console.log("Admin notification enabled ✅");
+        }
+
+    });
+</script>
+
 <script type="module" src="admin.js"></script>
 
 </body>
